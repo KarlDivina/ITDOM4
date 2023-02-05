@@ -1,0 +1,113 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+.header-text{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    color: black;
+    font-size: 13vh;
+}
+
+.items{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 30px 20px;
+    grid-column-gap: 20px;
+    grid-row-gap: 30px;
+}
+
+div > input{
+    padding: 5px 30px;
+    border: none;
+    outline: none;
+    background-color: #80b444;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 20px;
+    display: block;
+    margin: 0 auto;
+    transition: 0.2s all;
+}
+
+div > input:hover{
+    transform: scale(1.04);
+}
+
+.navbar{
+    padding-top: 2vh;
+    margin-left: auto;
+    text-align: right;
+    background-color: pink;
+    padding-bottom: 5vh;
+}
+
+.card-login {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 15%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    background-color: pink;
+    color: white;
+    border: none;
+    border-radius: 5%;
+}
+
+.card-login > .col-12 > .items{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.card-item {
+    justify-content: center;
+    margin-top: 5vh;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 3vh;
+    text-align: center;
+    background-color: pink;
+    color: white;
+    border-style: none;
+    border-width: 3px;
+    border-radius: 5%;
+}
+
+.brand-centered {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    width: 5vh;
+    height: 5vh;
+}
+
+.navbar-toggler {
+  z-index: 1;
+}
+
+li.nav-item {
+  margin-right: 2px;
+}
+
+/* 
+.card > input {
+    border-style: none;
+    border-radius: 3;
+} */
