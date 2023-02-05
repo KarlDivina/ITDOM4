@@ -67,6 +67,11 @@
                                                 <a class=\""."nav-link btn btn-outline-light\""." aria-current=\""."page\""." href=\""."loginPage.php\""." style=\""."color: white; margin-right: 5px;\"".">Log in</a>
                                             </li>
                                         ");
+                                        echo ("
+                                            <li class=\""."nav-item\"".">
+                                                <a class=\""."nav-link btn btn-outline-light\""." aria-current=\""."page\""." href=\""."registerPage.php\""." style=\""."color: white; margin-right: 5px;\"".">Register</a>
+                                            </li>
+                                        ");
                                     }
                                 ?>
                             </ul>

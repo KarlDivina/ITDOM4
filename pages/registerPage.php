@@ -162,52 +162,64 @@
                 printRegister();
             } else {
                 //check if details are valid || fit guideline
-                //else append details to CREDENTIALS
                 $providedFirstName = $_POST['name_first'];
                 $providedLastName = $_POST['name_last'];
                 $providedFullName = $providedFirstName . " " . $providedLastName;
                 $providedUsername = $_POST['username'];
                 $providedPassword = $_POST['password'];
 
+                echo("POST is valid");
                 
-                if($error = checkUser($CREDENTIALS, $providedUsername)){
-                    $error = checkPass($CREDENTIALS, $providedPassword);
-                    $index = count($CREDENTIALS) + 1;
-                    array_push($CREDENTIALS, 
-                        [
-                            $index => [
-                            "index" => $index,
-                            "name_full" => $providedFullName,
-                            "name_first" => $providedFirstName,
-                            "name_last" => $providedLastName,
-                            "username" => $providedUsername,
-                            "password" => $providedPassword,
-                            "access" => "MEMBER",
+                if(!$error = validateUser($CREDENTIALS, $providedUsername)){
+                    echo("user is valid");
+                    if($error = checkPass($CREDENTIALS, $providedPassword)){
+                        echo("pass is valid");
+                        $index = count($CREDENTIALS) + 1;
+                        array_push($CREDENTIALS, 
+                            [
+                                $index => [
+                                "index" => $index,
+                                "name_full" => $providedFullName,
+                                "name_first" => $providedFirstName,
+                                "name_last" => $providedLastName,
+                                "username" => $providedUsername,
+                                "password" => $providedPassword,
+                                "access" => "MEMBER",
+                                ]
                             ]
-                        ]
-                    );
-
+                        );
+                        $_SESSION['CREDENTIALS'] = $CREDENTIALS;
+                        echo("user added");
+                        print_r($_SESSION['CREDENTIALS']);
+                    }
                 }
 
-                if(!$error){
-                    $error = loginUser($providedUsername, $providedPassword);
-                    if(!$error){
+                if($error = checkUser($CREDENTIALS, $providedUsername)){
+                    if($error = loginUser($providedUsername, $providedPassword)){
+                        echo("user logged in");
                         $_SESSION['CREDENTIALS'] = $CREDENTIALS;
                         ?> <meta http-equiv="refresh" content="0;url=http://localhost/ITDOM2/Sem_2/login/pages/homePage.php"> <?php
                     } else {
                         printError();
                     }
-                } else {
-                    printError();
                 }
             }
         } else {
-            printLogin();
+            printRegister();
         } 
 
-        function checkUser($CREDENTIALS, $user){
+        function validateUser($CREDENTIALS, $username){
+            foreach ($CREDENTIALS as $user){
+                if(in_array($username, $CREDENTIALS[$user], false)){
+                    return(False);
+                } 
+            }
+            return(True);
+        }
+
+        function checkUser($CREDENTIALS, $username){
             foreach ($CREDENTIALS as $user => $userDetails){
-                if(in_array($_POST['username'], $CREDENTIALS[$user], false)){
+                if(in_array($username, $CREDENTIALS[$user], false)){
                     $_SESSION["USER_DETAILS"] = $userDetails;
                     return(False);
                 } 
@@ -216,18 +228,12 @@
         }
 
         function checkPass($CREDENTIALS, $user){
-            foreach ($CREDENTIALS as $user => $userDetails){
-                if(in_array($_POST['username'], $CREDENTIALS[$user], false)){
-                    $_SESSION["USER_DETAILS"] = $userDetails;
-                    return(False);
-                } 
-            }
+            // check if pass fits guideline
             return(True);
         }
-        
         function loginUser($providedUser, $providedPass){
-            $USERNAME = $_SESSION["USER_DETAILS"]["username"];
-            $PASSWORD = $_SESSION["USER_DETAILS"]["password"];
+            $USERNAME = $_POST['username'];
+            $PASSWORD = $_POST['password'];
 
             if(strcmp($USERNAME, $providedUser) == 0){
                 if (strcmp($PASSWORD, $providedPass) == 0){
@@ -244,25 +250,8 @@
             }  
             return(True);
         }
-
-        function getUsername($user){
-            $username = $user['username'];
-            return($username);
-        }
-        function getPassword($user){
-            $password = $user['password'];
-            return($password);
-        }
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous">
-
-
-                                        // echo ("
-                                        //     <li class=\""."nav-item\"".">
-                                        //         <a class=\""."nav-link btn btn-outline-light\""." aria-current=\""."page\""." href=\""."registerPage.php\""." style=\""."color: white; margin-right: 5px;\"".">Register</a>
-                                        //     </li>
-                                        // ");
-
     </script>
 </body>
 </html>
