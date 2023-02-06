@@ -11,7 +11,7 @@
     <title>Karl D : Register</title>
     <link rel="icon" type="image/x-icon" href="../assets/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link rel="stylesheet" href="midterm.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body class="container-fluid">
     <div class="row">
@@ -161,7 +161,7 @@
             if (empty($_POST[$_SESSION['FUNCTIONS']["F6"]])){ //register user
                 printRegister();
             } else {
-                //check if details are valid || fit guideline
+                //fit guideline
                 $providedFirstName = $_POST['name_first'];
                 $providedLastName = $_POST['name_last'];
                 $providedFullName = $providedFirstName . " " . $providedLastName;
@@ -169,15 +169,12 @@
                 $providedPassword = $_POST['password'];
 
                 echo("POST is valid");
-                
-                if(!$error = validateUser($CREDENTIALS, $providedUsername)){
-                    echo("user is valid");
-                    if($error = checkPass($CREDENTIALS, $providedPassword)){
-                        echo("pass is valid");
-                        $index = count($CREDENTIALS) + 1;
-                        array_push($CREDENTIALS, 
-                            [
-                                $index => [
+
+                if(!$error = checkDetails($providedFirstName, $providedLastName, $providedUsername, $providedPassword)){
+                    if($error = checkUser($CREDENTIALS, $providedUsername)){
+                        echo("user is valid");
+                        $index = count($CREDENTIALS);
+                        array_push($CREDENTIALS, [
                                 "index" => $index,
                                 "name_full" => $providedFullName,
                                 "name_first" => $providedFirstName,
@@ -186,21 +183,19 @@
                                 "password" => $providedPassword,
                                 "access" => "MEMBER",
                                 ]
-                            ]
+                            
                         );
                         $_SESSION['CREDENTIALS'] = $CREDENTIALS;
                         echo("user added");
-                        print_r($_SESSION['CREDENTIALS']);
-                    }
-                }
-
-                if($error = checkUser($CREDENTIALS, $providedUsername)){
-                    if($error = loginUser($providedUsername, $providedPassword)){
-                        echo("user logged in");
-                        $_SESSION['CREDENTIALS'] = $CREDENTIALS;
-                        ?> <meta http-equiv="refresh" content="0;url=http://localhost/ITDOM2/Sem_2/login/pages/homePage.php"> <?php
-                    } else {
-                        printError();
+                        if(!$error = checkUser($_SESSION['CREDENTIALS'], $providedUsername)){
+                            if(!$error = loginUser($providedUsername, $providedPassword)){
+                                echo("user logged in");
+                                $_SESSION['CREDENTIALS'] = $CREDENTIALS;
+                                ?> <meta http-equiv="refresh" content="0;url=http://localhost/ITDOM2/Sem_2/login/pages/homePage.php"> <?php
+                            } else {
+                                printError();
+                            }
+                        }
                     }
                 }
             }
@@ -208,11 +203,17 @@
             printRegister();
         } 
 
-        function validateUser($CREDENTIALS, $username){
-            foreach ($CREDENTIALS as $user){
-                if(in_array($username, $CREDENTIALS[$user], false)){
-                    return(False);
-                } 
+        function checkDetails($first, $last, $user, $pass){
+            if(!isset($first)){
+                return(True);
+            } else if(!isset($last)){
+                return(True);
+            } else if(!isset($user)){
+                return(True);
+            } else if(!isset($pass)){
+                return(True);
+            } else {
+                return(False);
             }
             return(True);
         }
