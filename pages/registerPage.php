@@ -112,6 +112,10 @@
                                             type="text"
                                             class="form-control form-rounded"
                                             name="name_first"
+                                            placeholder="<?php echo $_SESSION['ERR_FNAME']?>"
+                                            value="<?php if(!empty($_POST['name_first'])){
+                                                echo($_POST['name_first']);
+                                            } ?>"
                                         />
                                     </p>
                                     <p>
@@ -120,6 +124,10 @@
                                             type="text"
                                             class="form-control form-rounded"
                                             name="name_last"
+                                            placeholder="<?php echo $_SESSION['ERR_LNAME']?>"
+                                            value="<?php if(!empty($_POST['name_last'])){
+                                                echo($_POST['name_last']);
+                                            } ?>"
                                         />
                                     </p>
                                     <p>
@@ -128,6 +136,10 @@
                                             type="text"
                                             class="form-control form-rounded"
                                             name="username"
+                                            placeholder="<?php echo $_SESSION['ERR_UNAME']?>"
+                                            value="<?php if(!empty($_POST['username'])){
+                                                echo($_POST['username']);
+                                            } ?>"
                                         />
                                     </p>
                                     <p>
@@ -136,6 +148,7 @@
                                             type="password"
                                             class="form-control form-rounded"
                                             name="password"
+                                            placeholder="<?php echo $_SESSION['ERR_PASS']?>"
                                         />
                                     </p>
                                     <p>
@@ -162,13 +175,14 @@
                 printRegister();
             } else {
                 //fit guideline
+                // details != empty | check + display | value?
+                // username = unique | display
+                // pass must be x alphanumeric chars long including at least one special char | check + display
                 $providedFirstName = $_POST['name_first'];
                 $providedLastName = $_POST['name_last'];
                 $providedFullName = $providedFirstName . " " . $providedLastName;
                 $providedUsername = $_POST['username'];
                 $providedPassword = $_POST['password'];
-
-                echo("POST is valid");
 
                 if(!$error = checkDetails($providedFirstName, $providedLastName, $providedUsername, $providedPassword)){
                     if($error = checkUser($CREDENTIALS, $providedUsername)){
@@ -197,6 +211,8 @@
                             }
                         }
                     }
+                } else {
+                    printError();
                 }
             }
         } else {
@@ -204,13 +220,28 @@
         } 
 
         function checkDetails($first, $last, $user, $pass){
-            if(!isset($first)){
-                return(True);
-            } else if(!isset($last)){
-                return(True);
-            } else if(!isset($user)){
-                return(True);
-            } else if(!isset($pass)){
+            $errCount = 0;
+
+            $_SESSION['ERR_FNAME'] = $first;
+            $_SESSION['ERR_LNAME'] = $last;
+            $_SESSION['ERR_UNAME'] = $user;
+            $_SESSION['ERR_PASS'] = $pass;
+
+            if(empty($first)){
+                $_SESSION['ERR_FNAME'] = "First name is required!";
+                $errCount += 1;
+            } if(empty($last)){
+                $_SESSION['ERR_LNAME'] = "Last name is required!";
+                $errCount += 1;
+            } if(empty($user)){
+                $_SESSION['ERR_UNAME'] = "Username is required!";
+                $errCount += 1;
+            } if(empty($pass)){
+                $_SESSION['ERR_PASS'] = "Password is required!";
+                $errCount += 1;
+            }
+
+            if($errCount > 0){
                 return(True);
             } else {
                 return(False);
@@ -228,10 +259,6 @@
             return(True);
         }
 
-        function checkPass($CREDENTIALS, $user){
-            // check if pass fits guideline
-            return(True);
-        }
         function loginUser($providedUser, $providedPass){
             $USERNAME = $_POST['username'];
             $PASSWORD = $_POST['password'];
