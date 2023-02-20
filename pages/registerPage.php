@@ -175,8 +175,6 @@
                 printRegister();
             } else {
                 //fit guideline
-                // details != empty | check + display | value?
-                // username = unique | display
                 // pass must be x alphanumeric chars long including at least one special char | check + display
                 $providedFirstName = $_POST['name_first'];
                 $providedLastName = $_POST['name_last'];
@@ -283,4 +281,3 @@
     </script>
 </body>
 </html>
-
